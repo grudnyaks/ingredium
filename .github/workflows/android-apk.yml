@@ -1,0 +1,82 @@
+# Сборка APK для Android (оболочка Capacitor вокруг PWA из папки app/).
+# Запускается при каждом изменении app/ или android/ и вручную (Actions → Android APK → Run workflow).
+# Готовый APK появляется в разделе Releases (тег apk-latest) и в артефактах запуска.
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    paths: ["app/**", "android/**", ".github/workflows/android-apk.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Версия из app/version.json
+        id: ver
+        run: echo "name=$(node -p "require('./app/version.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Проект Capacitor
+        working-directory: android
+        run: |
+          npm init -y >/dev/null
+          npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+          rm -rf www && cp -r ../app www
+          npx cap add android
+          npx cap sync android
+
+      - name: Иконки
+        working-directory: android
+        continue-on-error: true
+        run: npx --yes @capacitor/assets@3 generate --android --iconBackgroundColor '#7c5cff' --iconBackgroundColorDark '#3b2a99'
+
+      - name: Номер версии
+        working-directory: android/android
+        run: |
+          sed -i "s/versionCode [0-9]*/versionCode ${{ github.run_number }}/" app/build.gradle
+          sed -i "s/versionName \"[^\"]*\"/versionName \"${{ steps.ver.outputs.name }}\"/" app/build.gradle
+
+      - name: Сборка APK
+        working-directory: android/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/Ingredium-${{ steps.ver.outputs.name }}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Ingredium-APK
+          path: Ingredium-*.apk
+
+      - name: Публикация в Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-latest
+          name: "Ингредиум для Android ${{ steps.ver.outputs.name }} (сборка ${{ github.run_number }})"
+          body: |
+            Скачайте файл .apk на телефон и откройте его. Android попросит разрешить установку из этого источника — разрешите.
+            Сборка из коммита ${{ github.sha }}.
+          files: Ingredium-*.apk
+          make_latest: true

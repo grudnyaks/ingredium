@@ -490,8 +490,9 @@ route(/^\/settings$/, async () => {
       </div>
       <label class="field">Меньше анимации и прозрачности <input type="checkbox" id="rm" ${st.reduceMotion ? "checked" : ""}></label>
     </section>
-    <section class="card"><h2>Установка на iPhone</h2>
+    <section class="card"><h2>Установка</h2>
       <ol class="small"><li>Откройте приложение в Safari.</li><li>Нажмите «Поделиться» → «На экран Домой».</li><li>Запускайте с иконки: приложение откроется на весь экран и будет работать офлайн.</li></ol>
+      <p class="small"><b>Android:</b> <a href="https://github.com/grudnyaks/ingredium/releases/tag/apk-latest" target="_blank" rel="noopener">скачать APK</a> или в Chrome: ⋮ → «Установить приложение».</p>
       <button class="btn ghost full" id="upd">Проверить обновления</button>
     </section>
     <section class="card"><h2>Данные и источники</h2>
@@ -524,8 +525,22 @@ function confirmInline(btn) {
 }
 
 // ---------- обновления по воздуху ----------
+// В APK (Capacitor) файлы лежат внутри приложения: сверяем версию с сайтом и предлагаем скачать свежий APK.
+const IS_NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+const REMOTE = "https://grudnyaks.github.io/ingredium/";
+const APK_URL = "https://github.com/grudnyaks/ingredium/releases/tag/apk-latest";
+const newer = (a, b) => { const x = a.split(".").map(Number), y = b.split(".").map(Number); for (let i = 0; i < 3; i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); } return false; };
+
 let swReg = null;
 async function checkUpdate(manual) {
+  if (IS_NATIVE) {
+    try {
+      const v = await (await fetch(`${REMOTE}version.json?t=${Date.now()}`, { cache: "no-store" })).json();
+      if (newer(v.version, APP_VERSION)) toast(`Вышла версия ${v.version}`, { label: "Скачать", run: () => window.open(APK_URL, "_blank") });
+      else if (manual) toast(`Установлена последняя версия ${APP_VERSION}`);
+    } catch { if (manual) toast("Нет связи: проверим обновления позже"); }
+    return;
+  }
   try {
     const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
     const v = await r.json();
@@ -541,6 +556,7 @@ function promptUpdate(worker) {
 }
 
 async function initSW() {
+  if (IS_NATIVE) { checkUpdate(false); document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") checkUpdate(false); }); return; }
   if (!("serviceWorker" in navigator)) return;
   try {
     swReg = await navigator.serviceWorker.register("sw.js");

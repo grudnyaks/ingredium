@@ -1,0 +1,8 @@
+{
+  "appId": "ru.ingredium.app",
+  "appName": "Ингредиум",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#f5f5f7"
+  }
+}
