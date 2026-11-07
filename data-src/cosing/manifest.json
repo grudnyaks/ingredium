@@ -1,0 +1,67 @@
+{
+  "annexes": {
+    "II": {
+      "content_sha256": "673b909e2c588d211994723e3133d621c41cc430c4e4306815a28e4ec47f7b71",
+      "data_rows": 1758,
+      "fetched_at": "2026-10-26T16:30:30Z",
+      "file_creation_date": "26/10/2026",
+      "last_update": "13/10/2026",
+      "raw_bytes": 650518,
+      "raw_sha256": "5999e783c5aa2ff28f2dcbb88a4d5fe62fc7104ff7b607cee3d3aa2b83e353cf",
+      "source_url": "https://api.tech.ec.europa.eu/cosing20/1.0/api/annexes/II/export-csv"
+    },
+    "III": {
+      "content_sha256": "941bfde51f30d636c96a1c590f9f6d31bff7513e96316ee14db65d0971debd49",
+      "data_rows": 381,
+      "fetched_at": "2026-10-26T16:30:31Z",
+      "file_creation_date": "26/10/2026",
+      "last_update": "13/10/2026",
+      "raw_bytes": 296566,
+      "raw_sha256": "3847c749514f25921d5b71e9e22da9ac8af00ad323db7ba6372ef338e9b8a53a",
+      "source_url": "https://api.tech.ec.europa.eu/cosing20/1.0/api/annexes/III/export-csv"
+    },
+    "IV": {
+      "content_sha256": "ed605c58143ce233e6172e11cc3e76cef5ecec012d2c1da51111deeb38d65a44",
+      "data_rows": 154,
+      "fetched_at": "2026-10-26T16:30:32Z",
+      "file_creation_date": "26/10/2026",
+      "last_update": "13/10/2026",
+      "raw_bytes": 47319,
+      "raw_sha256": "2fd3bbfd077823b738881cb4e8f5a396fc2285f7f08b9262ef2ca838555733e2",
+      "source_url": "https://api.tech.ec.europa.eu/cosing20/1.0/api/annexes/IV/export-csv"
+    },
+    "V": {
+      "content_sha256": "7dce45dafbca62da1540129a0b97758a0a6629ac29a73226b076215cacc3cf47",
+      "data_rows": 58,
+      "fetched_at": "2026-10-26T16:30:33Z",
+      "file_creation_date": "26/10/2026",
+      "last_update": "13/10/2026",
+      "raw_bytes": 31439,
+      "raw_sha256": "5eec77b6a70620b3ddb927e6ee0764cd18543cba6c7c5814cb184681b8feda88",
+      "source_url": "https://api.tech.ec.europa.eu/cosing20/1.0/api/annexes/V/export-csv"
+    },
+    "VI": {
+      "content_sha256": "f51d3272d3216ec96fda98bf7dd61f2bfc5b8d6c7c3c5b1eb86fb4451650e9c1",
+      "data_rows": 34,
+      "fetched_at": "2026-10-26T16:30:33Z",
+      "file_creation_date": "26/10/2026",
+      "last_update": "13/10/2026",
+      "raw_bytes": 19161,
+      "raw_sha256": "c3e95ff21e8effc1fa3142b5b428217581a4556c7f38cb4dc7ed0dc491ec1d56",
+      "source_url": "https://api.tech.ec.europa.eu/cosing20/1.0/api/annexes/VI/export-csv"
+    }
+  },
+  "fetched_at": "2026-10-26T16:30:29Z",
+  "generated_by": "scripts/fetch_registry.py",
+  "mirror": {
+    "fetched_at": "2026-10-26T16:30:33Z",
+    "function_count": 83,
+    "glossary_count": 30418,
+    "glossary_version": "EU 2025/1175",
+    "ingredient_count": 33114,
+    "license": "CC BY 4.0 (site declaration); source data: European Commission CosIng",
+    "source": "cosingchecker",
+    "url": "https://cosingchecker.com/api/v1"
+  },
+  "schema_version": 1
+}
